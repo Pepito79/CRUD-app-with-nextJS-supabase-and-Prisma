@@ -1,0 +1,48 @@
+@import "tailwindcss";
+/* @plugin "daisyui"; */
+
+:root {
+  --blue-50: #ecf3ff;
+  --blue-100: #dce8ff;
+  --blue-200: #c0d3ff;
+
+  --blue-400: #728bff;
+  --blue-500: #5163ff;
+  --blue-600: #3136fa;
+  --blue-700: #2527dd;
+  --blue-800: #2125b2;
+  --blue-900: #23288c;
+  --blue-950: #151651;
+
+
+  /* --background: #f3d3d3; */
+  --foreground: #0f0303;
+  --bg-forms: #9ab6ff;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+body {
+  background: var(--blue-950);
+  min-height: 100vh;
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
