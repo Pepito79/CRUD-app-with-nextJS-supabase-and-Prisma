@@ -16,11 +16,10 @@ import { Lock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { loginSchema } from "@/lib/schemas/loginSchema";
-import { adapter } from "next/dist/server/web/adapter";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginAction } from "../actions/login";
 import { toast } from "react-toastify";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const LoginHeader = () => {
 
@@ -51,7 +50,7 @@ const LoginHeader = () => {
 type TloginSchema = z.infer<typeof loginSchema>
 
 const Login = () => {
-
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -63,22 +62,26 @@ const Login = () => {
         }
     )
 
+    const onSubmit = async (formData: TloginSchema) => {
 
-    const onSubmit = async (data: TloginSchema) => {
-        const result = await loginAction(data)
+        const { data, error } = await authClient.signIn.email({
+            email: formData.email,
+            password: formData.password,
+            rememberMe: formData.rememberMe
+        })
 
-        if (!result.success) {
-            toast.error(result.message);
+        if (error) {
+            toast.error(error.message)
         } else {
-            toast.success(result.message);
-            redirect("/dashboard");
+            toast.success(`Welcome ${data.user.name}`)
+            router.push("/dashboard");
         }
     }
     return (
         <div
             className="flex items-center justify-center min-h-screen py-3">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Card className="w-120  p-3 bg-blue-100">
+                <Card className="w-120  p-3 border-none shadow-2xl bg-white/80 backdrop-blur-md">
                     <LoginHeader />
                     <CardContent className="space-y-4 mt-4">
                         <div className="space-y-2">
@@ -109,7 +112,7 @@ const Login = () => {
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                                <Checkbox id="remember" />
+                                <input type="checkbox" id="remember" {...register("rememberMe")} />
                                 <Label htmlFor="remember" className="text opacity-70">
                                     Remember me
                                 </Label>
@@ -122,7 +125,7 @@ const Login = () => {
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col gap-4 mt-4">
-                        <Button className="w-full h-10 rounded-xl border-2 border-black bg-black text-white transition-all duration-200 hover:bg-background hover:text-black hover:border-black disabled:opacity-50 disabled:cursor-not-allowed"
+                        <Button type="submit" className="w-full h-10 rounded-xl border-2 border-black bg-black text-white transition-all duration-200 hover:bg-background hover:text-black hover:border-black disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSubmitting}
                         >
                             Sign in

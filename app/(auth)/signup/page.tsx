@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signUpSchema } from "@/lib/schemas/auth";
+import { signUpSchema } from "@/lib/schemas/signupSchema";
 import {
     Card,
     CardContent,
@@ -16,9 +16,9 @@ import {
 
 import { UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form"
-import { signUpAction } from "../actions/auth";
 import { toast } from "react-toastify";
-
+import { authClient } from "../../../lib/auth-client";
+import { useRouter } from "next/navigation";
 
 
 
@@ -41,7 +41,7 @@ const SignUpHeader = () => {
             <LogoPlaceholder />
             <CardTitle className="text-center text-4xl tracking-tighter font-serif ">Create Account</CardTitle>
             <CardDescription className="text-center italic text-gray-700 -tracking-wide ">
-                Enter your details to register.
+                Enter your details to register
             </CardDescription>
         </CardHeader>
     );
@@ -61,6 +61,7 @@ const SignUpFooter = () => {
 
 const SignUp = () => {
 
+    const router = useRouter()
 
     const {
         register,
@@ -71,26 +72,66 @@ const SignUp = () => {
         })
 
 
-    const onSubmit = async (data: SignUpFormData) => {
-        const result = await signUpAction(data)
-        if (!result.success) {
-            toast.error(result.message)
+    const onSubmit = async (formData: SignUpFormData) => {
+        const { data: response, error } = await authClient.signUp.email({
+            email: formData.email,
+            password: formData.password,
+            name: `${formData.firstName} ${formData.lastName}`,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            callbackURL: "/dashboard"
+
+
+        })
+        if (error) {
+            // Better-Auth renvoie des erreurs claires (ex: "User already exists")
+            toast.error(error.message || "Une erreur est survenue");
         } else {
-            toast.success(result.message)
-            reset()
+            toast.success("Compte créé avec succès !");
+            // Pas besoin de redirect() de next/navigation ici car c'est du côté client
+            router.push("/dashboard");
         }
-
     }
-
     return (
         <div
             className="flex items-center justify-center min-h-screen py-3"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Card className="w-120  p-3 bg-blue-100">
+                <Card className="w-120  p-3 border-none shadow-2xl bg-white/80 backdrop-blur-md">
                     <SignUpHeader />
                     <CardContent className="space-y-4 mt-4">
                         <div className="space-y-2 pt-3">
+                            <div className="flex flex-row  gap-x-5  mb-5">
+                                <div>
+                                    <Label className="font-bold mb-2">
+                                        First Name
+                                    </Label>
+                                    <Input
+                                        {...register("firstName")}
+                                        id="firstName"
+                                        placeholder="Enter your first name"
+                                        type="text"
+                                        className="bg-white text-black h-10 border-2 border-amber-50"
+                                    />
+                                    {errors.firstName &&
+                                        <p className="text-sm text-red-500"> {`${errors.firstName.message}`}</p>}
+                                </div>
+                                <div>
+                                    <Label className="font-bold mb-2">
+                                        Last Name
+                                    </Label>
+                                    <Input
+                                        {...register("lastName")}
+                                        id="lastName"
+                                        placeholder="Enter your last name "
+                                        type="text"
+                                        className="bg-white text-black h-10 border-2 border-amber-50"
+                                    />
+                                    {errors.lastName &&
+                                        <p className="text-sm text-red-500"> {`${errors.lastName.message}`}</p>}
+                                </div>
+
+                            </div>
                             <Label className="font-bold " htmlFor="email">
                                 Email
                             </Label>
