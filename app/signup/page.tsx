@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signUpSchema } from "@/lib/schemas/auth";
-
 import {
     Card,
     CardContent,
@@ -17,6 +16,9 @@ import {
 
 import { UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form"
+import { signUpAction } from "../actions/auth";
+import { toast } from "react-toastify";
+
 
 
 
@@ -69,9 +71,15 @@ const SignUp = () => {
         })
 
 
-    const onSubmit = (data: SignUpFormData) => {
-        console.log("Data submited ! ", data);
-        reset()
+    const onSubmit = async (data: SignUpFormData) => {
+        const result = await signUpAction(data)
+        if (!result.success) {
+            toast.error(result.message)
+        } else {
+            toast.success(result.message)
+            reset()
+        }
+
     }
 
     return (
@@ -126,7 +134,8 @@ const SignUp = () => {
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col gap-4 mt-6">
-                        <Button className="w-1/3 bg-white border-2 h-10 rounded-xl" disabled={isSubmitting} variant="outline">Sign up</Button>
+                        <Button className="w-full h-10 rounded-xl border-2 border-black bg-black text-white transition-all duration-200 hover:bg-background hover:text-black hover:border-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={isSubmitting} variant="outline">Sign up</Button>
                         <SignUpFooter />
                     </CardFooter>
                 </Card>
