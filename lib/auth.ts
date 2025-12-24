@@ -12,7 +12,11 @@ export const auth = betterAuth({
     user: {
         additionalFields: {
             firstName: { type: "string" },
-            lastName: { type: "string" }
+            lastName: { type: "string" },
+            hasOnBoarded: { type: "boolean" },
         }
     }
 });
+
+export type Session = typeof auth.$Infer.Session
+export type User = typeof auth.$Infer.Session.user

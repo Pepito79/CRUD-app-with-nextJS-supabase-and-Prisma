@@ -14,7 +14,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { UserPlus } from "lucide-react";
+import { Loader2, UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify";
 import { authClient } from "../../../lib/auth-client";
@@ -79,17 +79,16 @@ const SignUp = () => {
             name: `${formData.firstName} ${formData.lastName}`,
             firstName: formData.firstName,
             lastName: formData.lastName,
-            callbackURL: "/dashboard"
+            hasOnBoarded: false,
+            callbackURL: "/onboarding"
 
 
         })
         if (error) {
-            // Better-Auth renvoie des erreurs claires (ex: "User already exists")
             toast.error(error.message || "Une erreur est survenue");
         } else {
             toast.success("Compte créé avec succès !");
-            // Pas besoin de redirect() de next/navigation ici car c'est du côté client
-            router.push("/dashboard");
+            router.push("/onboarding");
         }
     }
     return (
@@ -176,12 +175,21 @@ const SignUp = () => {
                     </CardContent>
                     <CardFooter className="flex flex-col gap-4 mt-6">
                         <Button className="w-full h-10 rounded-xl border-2 border-black bg-black text-white transition-all duration-200 hover:bg-background hover:text-black hover:border-black disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={isSubmitting} variant="outline">Sign up</Button>
+                            disabled={isSubmitting} variant="outline">
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Création de votre compte en cours...
+                                </>
+                            ) : (
+                                "Sign up"
+                            )}
+                        </Button>
                         <SignUpFooter />
                     </CardFooter>
                 </Card>
             </form>
-        </div>
+        </div >
     );
 };
 

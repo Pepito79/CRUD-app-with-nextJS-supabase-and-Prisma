@@ -47,14 +47,14 @@ export default async function NavbarDash() {
 
                 <div className="hidden md:flex items-center gap-6">
                     <Link
-                        href="/dashboard"
+                        href="/welcome"
                         className="flex items-center gap-2 px-4 py-1.5 rounded-full hover:bg-gray-100 text-sm transition-all duration-200 text-gray-600 hover:text-black font-bold font-mono"
                     >
                         <LayoutDashboard size={16} />
                         Dashboard
                     </Link>
                     <Link
-                        href="/dashboard"
+                        href="/welcome"
                         className="flex items-center gap-2 px-4 py-1.5 rounded-full hover:bg-gray-100 text-sm transition-all duration-200 text-gray-600 hover:text-black font-bold font-mono"
                     >
                         <Trophy size={16} />

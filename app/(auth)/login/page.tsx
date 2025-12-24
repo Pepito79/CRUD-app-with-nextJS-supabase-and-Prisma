@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2 } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -128,9 +128,15 @@ const Login = () => {
                         <Button type="submit" className="w-full h-10 rounded-xl border-2 border-black bg-black text-white transition-all duration-200 hover:bg-background hover:text-black hover:border-black disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSubmitting}
                         >
-                            Sign in
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Connexion en cours...
+                                </>
+                            ) : (
+                                "Sign in"
+                            )}
                         </Button>
-
                         <div className="text-center text-sm text-amber-950 tracking-tighter">
                             Don't have an account?
                             <Button variant={"link"} className="px-1 ml-1 hover:text-red-400">
