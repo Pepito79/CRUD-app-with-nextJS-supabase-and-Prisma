@@ -76,11 +76,27 @@ model Verification {
   @@map("verification")
 }
 
+enum CompanySituation {
+  PENDING_SIRET
+  LESS_THAN_3_MONTHS
+  FROM_3_MONTHS_TO_1_YEAR
+  MORE_THAN_1_YEAR
+  NO_BUSINESS
+}
+
+enum NumWokers {
+  ALONE
+  ONE
+  TWO_TO_TEN
+  MORE_THAN_TEN
+}
+
 model UserWorkingInfo {
-  id           String  @id @default(cuid())
-  userId       String  @unique
-  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comp_status  Int?
-  numb_workers Int?
+  id           String            @id @default(cuid())
+  userId       String            @unique
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comp_status  CompanySituation?
+  numb_workers NumWokers?
+  city         String?
   siret        String?
 }

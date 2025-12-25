@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 
 
 
+
 type SignUpFormData = z.infer<typeof signUpSchema>
 
 const SignUpHeader = () => {

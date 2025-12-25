@@ -1,6 +1,5 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -21,6 +20,7 @@ import onBoardingAction1 from "@/app/actions/onboarding/onboarding1";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { step2Schema, TStep2Form } from "@/lib/schemas/OnBoarding/step2Schema";
 import onBoardingAction2 from "@/app/actions/onboarding/onboarding2";
+import { CompanySituation } from "@/lib/generated/prisma/enums";
 
 
 
@@ -42,11 +42,11 @@ const Step2Form = () => {
 
     const router = useRouter()
     const INFO = [
-        { text: "Mon entreprise est en cours de création et j'attends mon SIRET", id: 1 },
-        { text: "Mon entreprise existe depuis moins de 3 mois", id: 2 },
-        { text: "Mon entreprise existe depuis 3 mois à 1 an", id: 3 },
-        { text: "Mon entreprise existe depuis plus d’un an", id: 4 },
-        { text: "Je n'ai pas d'entreprise", id: 5 }
+        { text: "Mon entreprise est en cours de création et j'attends mon SIRET", id: CompanySituation.PENDING_SIRET },
+        { text: "Mon entreprise existe depuis moins de 3 mois", id: CompanySituation.LESS_THAN_3_MONTHS },
+        { text: "Mon entreprise existe depuis 3 mois à 1 an", id: CompanySituation.FROM_3_MONTHS_TO_1_YEAR },
+        { text: "Mon entreprise existe depuis plus d’un an", id: CompanySituation.MORE_THAN_1_YEAR },
+        { text: "Je n'ai pas d'entreprise", id: CompanySituation.NO_BUSINESS }
     ]
     const {
         setValue,
@@ -61,7 +61,6 @@ const Step2Form = () => {
 
     const onSubmit = async (formData: TStep2Form) => {
         try {
-            // Appel de la Server Action
             const result = await onBoardingAction2(formData);
 
             if (result.success) {

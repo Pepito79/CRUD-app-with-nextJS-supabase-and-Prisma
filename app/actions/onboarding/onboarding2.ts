@@ -7,13 +7,13 @@ export default async function onBoardingAction2(step2Data: TStep2Form) {
     const session = await getServerSession()
     const userId = session?.user?.id
 
-    if (!userId) {
-        return { success: false, message: "Utilisateur non authentifié" }
-    }
-
     const validation = step2Schema.safeParse(step2Data)
     if (!validation.success) {
         return { success: false, message: "Données invalides" }
+    }
+
+    if (!userId) {
+        return { success: false, message: "Problème dans user" }
     }
 
     try {
@@ -29,6 +29,7 @@ export default async function onBoardingAction2(step2Data: TStep2Form) {
                 comp_status: validation.data.situationStatus
             }
         })
+
 
         return { success: true }
     } catch (error) {
