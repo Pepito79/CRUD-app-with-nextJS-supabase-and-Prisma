@@ -11,9 +11,11 @@ export const auth = betterAuth({
     },
     user: {
         additionalFields: {
-            firstName: { type: "string" },
-            lastName: { type: "string" },
-            hasOnBoarded: { type: "boolean" },
+            firstName: { type: "string", required: false },
+            lastName: { type: "string", required: false },
+            hasOnBoarded: { type: "boolean", required: false },
+            phoneNumber: { type: "string", required: false },
+            job: { type: "string", required: false }
         }
     }
 });

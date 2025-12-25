@@ -76,19 +76,16 @@ const SignUp = () => {
         const { data: response, error } = await authClient.signUp.email({
             email: formData.email,
             password: formData.password,
-            name: `${formData.firstName} ${formData.lastName}`,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
             hasOnBoarded: false,
+            name: formData.email.split('@')[0],
             callbackURL: "/onboarding"
-
-
         })
         if (error) {
+            console.log(error)
             toast.error(error.message || "Une erreur est survenue");
         } else {
             toast.success("Compte créé avec succès !");
-            router.push("/onboarding");
+            router.push("/onboarding/step1");
         }
     }
     return (
@@ -101,34 +98,6 @@ const SignUp = () => {
                     <CardContent className="space-y-4 mt-4">
                         <div className="space-y-2 pt-3">
                             <div className="flex flex-row  gap-x-5  mb-5">
-                                <div>
-                                    <Label className="font-bold mb-2">
-                                        First Name
-                                    </Label>
-                                    <Input
-                                        {...register("firstName")}
-                                        id="firstName"
-                                        placeholder="Enter your first name"
-                                        type="text"
-                                        className="bg-white text-black h-10 border-2 border-amber-50"
-                                    />
-                                    {errors.firstName &&
-                                        <p className="text-sm text-red-500"> {`${errors.firstName.message}`}</p>}
-                                </div>
-                                <div>
-                                    <Label className="font-bold mb-2">
-                                        Last Name
-                                    </Label>
-                                    <Input
-                                        {...register("lastName")}
-                                        id="lastName"
-                                        placeholder="Enter your last name "
-                                        type="text"
-                                        className="bg-white text-black h-10 border-2 border-amber-50"
-                                    />
-                                    {errors.lastName &&
-                                        <p className="text-sm text-red-500"> {`${errors.lastName.message}`}</p>}
-                                </div>
 
                             </div>
                             <Label className="font-bold " htmlFor="email">
